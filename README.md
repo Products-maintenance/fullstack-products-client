@@ -1,73 +1,117 @@
-# React + TypeScript + Vite
+# Product Management App (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application to manage products through a simple and intuitive interface.  
+Users can create, update, and delete products, as well as view them in a structured table.
 
-Currently, two official plugins are available:
+This frontend application consumes a custom external API and demonstrates a clean architecture using React Router Data APIs and runtime validation.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Live Demo
 
-## React Compiler
+https://fullstack-products-client.vercel.app/
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## Features
 
-## Expanding the ESLint configuration
+- Create new products
+- Edit all product fields
+- Update individual product attributes
+- Delete products
+- View products in a structured table
+- Form-based product creation and editing
+- Navigation between views using routing
+- Validation of API data using **Valibot**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **React** – UI library
+- **TypeScript** – static typing
+- **React Router (Data APIs)** – routing with loaders and actions
+- **Axios** – HTTP client for API communication
+- **Valibot** – runtime validation of API data
+- **Vite** – build tool and development server
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Architecture Highlights
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Routing with Data APIs
+
+The application uses **React Router Data APIs**:
+
+- **Loaders** – fetch product data before rendering views
+- **Actions** – handle form submissions (create, update, delete)
+
+This approach keeps data logic **close to the routing layer**, improving maintainability and clarity.
+
+### API Layer
+
+All API communication is centralized in:
+
+- `ProductService` – handles CRUD operations with the external API
+
+This ensures separation between **data fetching logic and UI components**.
+
+### Validation
+
+Data exchanged with the API is validated using **Valibot**, ensuring:
+
+- Type-safe communication
+- Early detection of invalid data
+- Improved application robustness
+
+### Component Organization
+
+The project follows a **modular structure**, separating responsibilities into:
+
+- UI components
+- Views (pages)
+- Services (API layer)
+- Types and helpers
+
+## Project Structure
+
+```text
+client
+ ├── src
+ │   ├── components        # Reusable UI components
+ │   │    ├── ErrorMessage.tsx
+ │   │    ├── ProductDetails.tsx
+ │   │    └── ProductForm.tsx
+ │   ├── views             # Application pages
+ │   │    ├── Products.tsx
+ │   │    ├── NewProduct.tsx
+ │   │    └── EditProduct.tsx
+ │   ├── layouts           # Layout components
+ │   │    └── Layout.tsx
+ │   ├── services          # API communication layer
+ │   │    └── ProductService.ts
+ │   ├── helpers           # Utility functions
+ │   ├── types             # TypeScript types
+ │   ├── router.tsx        # Routing (loaders & actions)
+ │   └── main.tsx          # Entry point
+ │
+ ├── index.html
+ ├── vite.config.ts
+ └── package.json
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Installation
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Clone the repository:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/jordirofu/product-management-frontend.git
 ```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+## Author
+
+Developed by **Jordi Romero**.
