@@ -6,7 +6,6 @@ import { RouterProvider } from 'react-router-dom'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {/* Esta es la manera de conectar main con nuestro router */}
     <RouterProvider router={router} /> 
   </StrictMode>,
 )

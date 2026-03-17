@@ -2,47 +2,42 @@ import { DraftProductSchema, ProductSchema, ProductArraySchema, type Product } f
 import { safeParse } from "valibot";
 import axios from "axios";
 
-type ProductData = {                        //este tipo tan raro es de ponerte encima de const data en NewProduct... es sintaxis de Typescript
- [k: string]: FormDataEntryValue            //es como Record<string, formDataEntryValue>. FormDataEntryValue es tipo del DOM (Web API)
+type ProductData = {
+    [k: string]: FormDataEntryValue
 }
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/api/products`;
 
 
-export async function addProduct(data: ProductData){  //lo que viene de un form de React Router tiene ese tipo... no puedes meterle DraftProductSchea
+export async function addProduct(data: ProductData) {
     try {
-        // const result = safeParse(DraftProductSchema, data)
-        // console.log(result);   // te devolvía:   succes: false      issues: espera que el price fuera un número, peoro lo interpretaba como string 
-        const result = safeParse(DraftProductSchema, {  //result.output es lo que guardará el objeto
+        const result = safeParse(DraftProductSchema, {
             name: data.name,
-            price: +data.price  //hay que convertirlo a número   
+            price: +data.price
         })
-        
-        if (result.success){
-            /*const { data } =*/ await axios.post(baseUrl, result.output/*{   result.outut ya es el objeto que espera la api del servidor     
-                name: result.output.name,
-                price: result.output.price
-            }*/) 
+
+        if (result.success) {
+            await axios.post(baseUrl, result.output)
         }
-        else{
-            throw new Error ('Datos no válidos'); //el error que lance será recogido por el catch de abajo
+        else {
+            throw new Error('Datos no válidos');
         }
     }
-     catch (error) {
+    catch (error) {
         console.log(error);
     }
 }
 
-export async function getProducts(){
+export async function getProducts() {
     try {
         const { data } = await axios(baseUrl);
 
         const result = safeParse(ProductArraySchema, data.data);
 
-        if (result.success){
+        if (result.success) {
             return result.output;
         }
-        else{
+        else {
             throw new Error('Hubo un error...')
         }
     } catch (error) {
@@ -50,18 +45,18 @@ export async function getProducts(){
     }
 }
 
-export async function getProductById( productId : Product['id'] ){
+export async function getProductById(productId: Product['id']) {
     try {
-    const urlWithId = baseUrl+`/${productId}`;
+        const urlWithId = baseUrl + `/${productId}`;
 
-        const { data } = await axios.get(urlWithId );
+        const { data } = await axios.get(urlWithId);
 
         const result = safeParse(ProductSchema, data.data);
 
-        if (result.success){
+        if (result.success) {
             return result.output;
         }
-        else{
+        else {
             throw new Error('Hubo un error...')
         }
     } catch (error) {
@@ -71,60 +66,46 @@ export async function getProductById( productId : Product['id'] ){
 
 export async function modifyProduct(data: ProductData, id: Product['id']) {
     try {
-        const urlWithId = baseUrl+`/${id}`;
-     
+        const urlWithId = baseUrl + `/${id}`;
 
-        const result = safeParse(ProductSchema, {  //result.output es lo que guardará el objeto
+
+        const result = safeParse(ProductSchema, {
             id,
             name: data.name,
-            price: +data.price,  //hay que convertirlo a número /él hizo algo un poco bestia... lo comento aqquí abajo
-            availability: data.availability === "true" //hay que convertirlo a bool //él hizo un metodito en útils
+            price: +data.price, availability: data.availability === "true"
         })
-        //Para covertir data.price a number con temas de valibolt. Lo encuentro excesivo.
-        // import { NumberSchema, number, coerce, parse } from "valibot";
 
-        // const NumberSchema = coerce(number(), Number)
-
-        // const result = safeParse...
-        //     id,
-        //     price: ParseArgsConfig(NumberScheq, data.price)
-
-        
-        if (result.success){
-             /*const { data } =*/ await axios.put(urlWithId, result.output//{        //url, datos y, opcional, config.
-            //     name: result.output.name,
-            //     price: result.output.price,
-            //     availability: result.output.availability
-            // }
-            ) 
+        if (result.success) {
+            await axios.put(urlWithId, result.output
+            )
         }
-        else{
-            throw new Error ('Datos no válidos'); //el error que lance será recogido por el catch de abajo
+        else {
+            throw new Error('Datos no válidos'); //el error que lance será recogido por el catch de abajo
         }
     }
-     catch (error) {
+    catch (error) {
         console.log(error);
     }
 }
 
-export async function modifyAvailability (id: Product['id']){
+export async function modifyAvailability(id: Product['id']) {
     console.log('desde service');
-    const urlWithId = baseUrl+`/${id}`;
+    const urlWithId = baseUrl + `/${id}`;
     try {
         await axios.patch(urlWithId);
     } catch (error) {
         console.log(error);
     }
-     
-    
+
+
 }
 
-export async function deleteProduct( id: Product['id']){
-try {
-     const urlWithId = baseUrl+`/${id}`;
-     await axios.delete(urlWithId);
-   
-} catch (error) {
-    throw new Error ('Hubo un error al acceder a base de datos');
-}
+export async function deleteProduct(id: Product['id']) {
+    try {
+        const urlWithId = baseUrl + `/${id}`;
+        await axios.delete(urlWithId);
+
+    } catch (error) {
+        throw new Error('Hubo un error al acceder a base de datos');
+    }
 }

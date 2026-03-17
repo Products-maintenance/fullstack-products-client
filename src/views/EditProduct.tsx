@@ -5,12 +5,9 @@ import type { Product } from "../types";
 import ProductForm from "../components/ProductForm";
 
 
-//OJO PARA ESTE MÉTODO Y EL DE ABAJO.. TAMBIÉN EXISTEN LOS TIPOS ACTIONFUNCTION Y LOADERFUNCTION... SI NO VAS A RECUPERAR PARÁMETROS.
-export async function action({ request, params }: ActionFunctionArgs) { //--> la request, params, etc siempre ha de llevar este tipo: ActionFunctionArgs
-    //request es para hacer request.formData y obtener los valores del formulairo
-    //param es para leer el parámetro de la url... que es el id    
+export async function action({ request, params }: ActionFunctionArgs) {
 
-    const data = Object.fromEntries(await request.formData()) //sale un objecto con el conjunto de key values que tocan
+    const data = Object.fromEntries(await request.formData())
 
     let error = '';
     if (Object.values(data).includes("")) {
@@ -18,25 +15,20 @@ export async function action({ request, params }: ActionFunctionArgs) { //--> la
     }
 
     if (error.length) {
-        return error;  //VIT! Cdo devuelves algo en tus "actions" están de vuelta en tu componente Form, 
-        // por medio de un hook llamado useActionData
+        return error;
     }
 
-    await modifyProduct(data, Number(params.productId)); //await para que no vaya a otra linea hasta que haya acabado la cosa
-
-    return redirect('/'); //al final, que te lleve a otro lado. Esto también es de react-router-dom
-
+    await modifyProduct(data, Number(params.productId));
+    return redirect('/');
 }
 
-export async function loader({ params }: LoaderFunctionArgs) { //los params vienen por defecto, siempre ha de llevar este tipo        
+export async function loader({ params }: LoaderFunctionArgs) {
     const product = await getProductById(Number(params.productId));
-    if (!product) { //quizás alguien mete directamente en url una id que no existe
+    if (!product) {
         return redirect('/');
-        //throw new Response('', {status: 404, statusText:'No encontrado'})  //Response es un objeto de Fetch API. El objeto de respuesta a una llamada http.
     }
     return product;
 }
-
 
 const availabilityOptions = [
     { name: 'Disponible', value: true },
@@ -44,18 +36,9 @@ const availabilityOptions = [
 ]
 
 
-
-
-
-
-
 export default function EditProduct() {
 
-    const error = useActionData(); //esto contiene lo que devuelva (return) la function "action"
-
-    //Abajo: para método 1 de trasladar datos desde la vista anterior
-    // const { state } = useLocation();
-    //el método 2 es el uso de useLoaderData 
+    const error = useActionData();
 
     const product = useLoaderData() as Product;
 
@@ -78,7 +61,7 @@ export default function EditProduct() {
             >
                 <ProductForm
                     product={product}
-                    />
+                />
 
 
                 <div className="mb-4">

@@ -1,11 +1,10 @@
 import type { Product } from "../types"
 
 type ProductFormProps = {
-    product?: Product   //hay que hacerlo opcional... y también abajo, en default value
-                        //desde edit vendrá con producto... desde newproduct NO
+    product?: Product
 }
 
-export default function ProductForm( {product} : ProductFormProps) {
+export default function ProductForm({ product }: ProductFormProps) {
     return (
         <>
             <div className="mb-4">
@@ -20,9 +19,6 @@ export default function ProductForm( {product} : ProductFormProps) {
                     placeholder="Nombre del Producto"
                     name="name"
                     defaultValue={product?.name}
-                //Abajo: para método 1 de trasladar datos desde products aquí
-                //defaultValue... no usamos value en esta versión de react-router-dom. Es lo que aparecerá por defecto... pero lo puedes cambiar
-                // defaultValue={state.product.name}
                 />
             </div>
             <div className="mb-4">
@@ -37,7 +33,6 @@ export default function ProductForm( {product} : ProductFormProps) {
                     placeholder="Precio Producto. ej. 200, 300"
                     name="price"
                     defaultValue={product?.price}
-                // defaultValue={state.product.price}
                 />
             </div>
 

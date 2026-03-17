@@ -3,13 +3,8 @@ import ErrorMessage from "../components/ErrorMessage";
 import { addProduct } from "../services/ProductService";
 import ProductForm from "../components/ProductForm";
 
-// VIT!!   "request" es el objeto que contiene toda la info entrada en el formulario.
-// No es fácil de recuperar... hay que hacerlo como aparece aquí abajo
-export async function action({ request } : ActionFunctionArgs) { //--> la request siempre ha de llevar este tipo: ActionFunctionArgs
-    const data = Object.fromEntries(await request.formData()) 
-    //orig, request.formData() es un array de entradas dobles [['name', 'Jordi'], ['age, 23]]]
-    //sale un objecto con el conjunto de key values --> {name: "Jordi", age: 23}
-    //const data = [...await request.formData()] Con esto sale un poco raro, un array con un array por propiedad
+export async function action({ request }: ActionFunctionArgs) {
+    const data = Object.fromEntries(await request.formData())
 
     let error = '';
     if (Object.values(data).includes("")) {
@@ -17,24 +12,18 @@ export async function action({ request } : ActionFunctionArgs) { //--> la reques
     }
 
     if (error.length) {
-        return error;  //VIT! Cdo devuelves algo en tus "actions" están de vuelta en tu componente Form, 
-        // por medio de un hook llamado useActionData
+        return error;
     }
 
-    await addProduct(data); //await para que no vaya a otra linea hasta que haya acabado la cosa
+    await addProduct(data);
 
-    return redirect('/'); //al final, que te lleve a otro lado. Esto también es de react-router-dom
-                            //no se devuelve abajo a "const error = useActionData" porque "redirect" destruye NewProduct.tsx... 
-                            // ya se está yendo a Products.tsx 
-
-
+    return redirect('/');
 }
 
 
 export default function NewProduct() {
 
-    const error = useActionData(); //esto contiene lo que devuelva (return) la function "action".
-                //solo se usa si hay error, si no, se hace una redirección.
+    const error = useActionData();
 
     return (
         <>

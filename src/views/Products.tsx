@@ -10,7 +10,7 @@ export async function loader() {
 
 }
 
-export async function action({request} : ActionFunctionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const data = Object.fromEntries(await request.formData())
   await modifyAvailability(+data.id);
 
@@ -18,13 +18,11 @@ export async function action({request} : ActionFunctionArgs) {
 
 
 
-
 export default function Products() {
 
-  const products = useLoaderData() as Product[];  //el as PRoduct[] se lo has puesto más tarde, porque en el map, t decía que product era 'any'
-                                                  //aquí solo especificas para que TS esté contento. Ya hiciste el safeParse en el service.
+  const products = useLoaderData() as Product[];
 
-   return (
+  return (
     <>
       <div className="flex justify-between">
         <h2 className="text-4xl font-black text-slate-500">Productos</h2>
