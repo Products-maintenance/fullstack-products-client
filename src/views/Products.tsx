@@ -24,16 +24,16 @@ export default function Products() {
 
   return (
     <>
-      <div className="flex justify-between">
-        <h2 className="text-4xl font-black text-slate-500">Productos</h2>
+      <div className="min-w-0 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <h2 className="text-3xl md:text-4xl font-black text-slate-500">Productos</h2>
         <Link
           to="productos/nuevo"
-          className="rounded-md bg-indigo-600 p-3 text-sm font-bold text-white shadow-sm hover:bg-indigo-500">
+          className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-indigo-500 text-center  sm:w-auto w-fit">
           Agregar Producto
         </Link>
       </div>
 
-      <div className="p-2 overflow-x-auto">
+      <div className="p-2 overflow-x-auto max-w-full">
         <table className="w-full mt-5 table-auto min-w-150">
           <thead className="bg-slate-800 text-white">
             <tr>
